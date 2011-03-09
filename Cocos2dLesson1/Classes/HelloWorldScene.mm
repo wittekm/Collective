@@ -97,6 +97,7 @@ std::list<HitObject> hitObjects;
 		[timer startTimer];
 		
 		
+		@try {
 		/* Music stuff */
 		MPMusicPlayerController * musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
 		MPMediaItem * currentItem = musicPlayer.nowPlayingItem;
@@ -106,6 +107,9 @@ std::list<HitObject> hitObjects;
 		CCSprite * albumArt = [CCSprite spriteWithCGImage:[artworkImage CGImage]];
 		albumArt.position = ccp(480/2, 320/2);
 		[self addChild:albumArt];
+		} @catch(NSException *e) {
+			cout << "well hey you did some crazy shit there" << endl;
+		}
 		/* cgpoints go from bottom left to top right like a graph */
 	}
 	return self;
