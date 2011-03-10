@@ -19,6 +19,9 @@ using std::cout;
 using std::endl;
 using std::vector;
 
+CCLabelTTF * scoreLabel;
+int score;
+
 CCSprite * seeker1;
 CCSprite *cocosGuy;
 
@@ -26,6 +29,8 @@ Circle * circ;
 
 Timer * timer;
 Beatmap * beatmap;
+
+MPMusicPlayerController * musicPlayer;
 
 std::list<Circle*> circles;
 std::list<HitObject> hitObjects;
@@ -118,6 +123,7 @@ std::list<HitObject> hitObjects;
 		circ.position = ccp(480/2,320/2);
 		[self addChild: circ];
 		
+		/*
 		seeker1 = [CCSprite spriteWithFile: @"seeker.png"];
 		seeker1.position = ccp(50, 100);
 		[self addChild:seeker1];
@@ -128,28 +134,47 @@ std::list<HitObject> hitObjects;
 		
 		seeker1.position = ccp(-400, -400);
 		cocosGuy.position = ccp(-400, -400);
-		
+		*/
+		 
 		[self schedule:@selector(nextFrame:)];
 		
 		self.isTouchEnabled = YES;
 		
-		[timer startTimer];
-		
 		
 		@try {
-		/* Music stuff */
-		MPMusicPlayerController * musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
-		MPMediaItem * currentItem = musicPlayer.nowPlayingItem;
-		MPMediaItemArtwork *artwork = [currentItem valueForProperty:MPMediaItemPropertyArtwork];
-		UIImage * artworkImage = [artwork imageWithSize:CGSizeMake(320, 320)];
-		
-		CCSprite * albumArt = [CCSprite spriteWithCGImage:[artworkImage CGImage]];
-		albumArt.position = ccp(480/2, 320/2);
-		[self addChild:albumArt];
+			/* Music stuff */
+			musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
+			
+			MPMediaQuery * mfloQuery = [[MPMediaQuery alloc] init];
+			[mfloQuery addFilterPredicate: [MPMediaPropertyPredicate
+										predicateWithValue: @"The Love Bug"
+										forProperty: MPMediaItemPropertyTitle]];
+			
+			[musicPlayer setQueueWithQuery:mfloQuery];
+			[musicPlayer play];
+			[timer startTimer];
+			
+			
+			// Artwork
+			MPMediaItem * currentItem = musicPlayer.nowPlayingItem;
+			MPMediaItemArtwork *artwork = [currentItem valueForProperty:MPMediaItemPropertyArtwork];
+			UIImage * artworkImage = [artwork imageWithSize:CGSizeMake(320, 320)];
+			
+			CCSprite * albumArt = [CCSprite spriteWithCGImage:[artworkImage CGImage]];
+			albumArt.position = ccp(480/2, 320/2);
+			[self addChild:albumArt];
 		} @catch(NSException *e) {
-			cout << "well hey you did some crazy shit there" << endl;
+			cout << "no music playing dawg" << endl;
 		}
 		/* cgpoints go from bottom left to top right like a graph */
+		
+		
+		
+		score = 0;
+		scoreLabel = [CCLabelTTF labelWithString:@"0" fontName:@"Helvetica" fontSize:24.0];
+		//scoreLabel.anchorPoint = ccp([scoreLabel contentSize].width,[scoreLabel contentSize].height);
+		scoreLabel.position = ccp(430,200);
+		[self addChild: scoreLabel];
 	}
 	return self;
 }
@@ -158,40 +183,33 @@ BOOL otherDirection = NO;
 
 - (void) nextFrame:(ccTime)dt {
 	
-	/*
-	if(otherDirection)
-		seeker1.position = ccp( seeker1.position.x - 200*dt, seeker1.position.y );
-	else
-		seeker1.position = ccp( seeker1.position.x + 200*dt, seeker1.position.y );
-
-	
-    if (seeker1.position.x > 480+32)
-		otherDirection = true;
-    
-	else if (seeker1.position.x < 0)
-        otherDirection = false;
-	 */
-	
 	/***** Music Game Stuff ****/
 	
-	double milliseconds = [timer timeFromStart] * 1000.0f;
+	double milliseconds = [musicPlayer currentPlaybackTime] * 1000.0f;
+	milliseconds += 800; // acct for offset???
+	//double milliseconds = [timer timeFromStart] * 1000.0f;
+	//milliseconds += 1000; // offset for m-flo
 	
-	double duration = 1.0;
+	double durationS = 0.8; // seconds
+	double timeAllowanceMs = 150;
 	// Make stuff start to appear
 	while(!beatmap->hitObjects.empty()) {
 		HitObject o = beatmap->hitObjects.front(); 
-		
-		cout << o.startTimeMs << " " << milliseconds << endl;
-		if(o.startTimeMs < milliseconds) {
+		//double timeAccordingToPlayer = [musicPlayer currentPlaybackTime];
+		//cout << o.startTimeMs << " " << milliseconds << " " << timeAccordingToPlayer <<  endl;
+		if(milliseconds > o.startTimeMs) {
 			CGPoint location = CGPointMake(o.x, o.y);
 			location = [[CCDirector sharedDirector] convertToGL: location];
 			
-			Circle * c = [[Circle alloc] init];
+			cout << "making a circle" << endl;
+			Circle * c = [[Circle alloc] initWithColor: 0 green: 180 blue: 0];
 			c.position = location;
 			[self addChild:c];
+			[c appearWithDuration: durationS];
+			
 			circles.push_back(c);
 			hitObjects.push_back(o);
-			[c appearWithDuration: duration];
+			
 			
 			beatmap->hitObjects.pop_front();
 		}
@@ -200,7 +218,8 @@ BOOL otherDirection = NO;
 	}
 
 	while(!hitObjects.empty()) {
-		if(hitObjects.front().startTimeMs + 1500 < milliseconds) {
+		HitObject o = hitObjects.front();
+		if(milliseconds > o.startTimeMs + timeAllowanceMs + (1000.0 * durationS)) {
 			cout << "asdf so yeah im getting rid of shit" << endl;
 			hitObjects.pop_front();
 			Circle * c = circles.front();
@@ -220,6 +239,26 @@ BOOL otherDirection = NO;
 }
 
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
+	CGPoint location = [self convertTouchToNodeSpace: touch];
+	
+	if(!hitObjects.empty()) {
+	HitObject o = hitObjects.front();
+	double dist = sqrt( pow(o.x - location.x, 2) + pow(o.y - location.y, 2));
+	int distInt = dist;
+	
+	/*
+	hitObjects.pop_front();
+	Circle * c = circles.front();
+	circles.pop_front();
+	[self removeChild:c cleanup:true];
+	 */
+	
+		score += 1;
+		[scoreLabel setString:[NSString stringWithFormat:@"%d %d", score, distInt]];
+	}
+	else
+		[scoreLabel setString:[NSString stringWithFormat:@"%d X", score]];
+
     return YES;
 }
 
@@ -228,17 +267,14 @@ BOOL otherDirection = NO;
 	
 	//[self runAction: [CCRipple3D actionWithPosition: location radius: 48 waves: 1 amplitude: 90 grid: ccg(4,4) duration: 0.75]];
 	
-	/*
-	[cocosGuy stopAllActions];
-	[cocosGuy runAction: [CCMoveTo actionWithDuration:1 position:location]];  
-	 */
 	
+	/*
 	Circle * circ = [[Circle alloc] initWithColor: 120 green: 0 blue: 0];
 	circ.position = location;
 	[self addChild:circ];
 	
-	[circ appearWithDuration:1.0];
-	
+	[circ appearWithDuration:2.0];
+	*/
 }
 
 
