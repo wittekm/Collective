@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1F3B9A2D0EF2145700286867 /* Cocos2dLesson1AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F3B9A2B0EF2145700286867 /* Cocos2dLesson1AppDelegate.m */; };
-		500A15C51327C2A9001E17C7 /* CollectiveButton.png in Resources */ = {isa = PBXBuildFile; fileRef = 500A15C41327C2A9001E17C7 /* CollectiveButton.png */; };
 		504DFBCE10AF12E9006D82FE /* CLScoreServerPost.h in Headers */ = {isa = PBXBuildFile; fileRef = 504DFBC810AF12E9006D82FE /* CLScoreServerPost.h */; };
 		504DFBCF10AF12E9006D82FE /* CLScoreServerPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 504DFBC910AF12E9006D82FE /* CLScoreServerPost.m */; };
 		504DFBD010AF12E9006D82FE /* CLScoreServerRequest.h in Headers */ = {isa = PBXBuildFile; fileRef = 504DFBCA10AF12E9006D82FE /* CLScoreServerRequest.h */; };
@@ -276,7 +275,6 @@
 		1F3B9A2C0EF2145700286867 /* Cocos2dLesson1AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Cocos2dLesson1AppDelegate.h; path = Classes/Cocos2dLesson1AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		1F3B9A820EF2151B00286867 /* Cocos2dLesson1_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Cocos2dLesson1_Prefix.pch; sourceTree = SOURCE_ROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		500A15C41327C2A9001E17C7 /* CollectiveButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CollectiveButton.png; path = ../../Desktop/hitObjectButton/CollectiveButton.png; sourceTree = SOURCE_ROOT; };
 		504DFBC810AF12E9006D82FE /* CLScoreServerPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLScoreServerPost.h; sourceTree = "<group>"; };
 		504DFBC910AF12E9006D82FE /* CLScoreServerPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLScoreServerPost.m; sourceTree = "<group>"; };
 		504DFBCA10AF12E9006D82FE /* CLScoreServerRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLScoreServerRequest.h; sourceTree = "<group>"; };
@@ -742,7 +740,6 @@
 		50F414EB1069373D002A0D5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				500A15C41327C2A9001E17C7 /* CollectiveButton.png */,
 				508831E2132691DD00C6289B /* button.ring.png */,
 				508831721325835700C6289B /* mflo.osu */,
 				508830D41325693900C6289B /* Default.png */,
@@ -1173,7 +1170,6 @@
 				508830D51325693900C6289B /* Default.png in Resources */,
 				508831731325835700C6289B /* mflo.osu in Resources */,
 				508831E3132691DD00C6289B /* button.ring.png in Resources */,
-				500A15C51327C2A9001E17C7 /* CollectiveButton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

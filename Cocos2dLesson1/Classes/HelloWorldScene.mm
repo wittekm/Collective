@@ -31,7 +31,46 @@ std::list<Circle*> circles;
 std::list<HitObject> hitObjects;
 
 // HelloWorld implementation
-@implementation HelloWorld
+@implementation Layer1
++(id) scene
+{
+	// 'scene' is an autorelease object.
+	CCScene *scene = [CCScene node];
+	
+	// 'layer' is an autorelease object.
+	Layer2 *layer = [Layer1 node];
+	
+	// add layer as a child to scene
+	[scene addChild: layer];
+	
+	// return the scene
+	return scene;
+}
+
+-(id) init
+{
+	if( (self=[super init])) {
+
+	[CCMenuItemFont setFontSize:30];
+	[CCMenuItemFont setFontName: @"Courier New"];
+	
+	CCMenuItem *item1 = [CCMenuItemFont itemFromString: @"Press me to start!!" target: self selector:@selector(menuCallbackStart:)];
+	CCMenu *menu = [CCMenu menuWithItems:
+					item1, nil];
+	[self addChild: menu];
+		
+	}
+	return self;
+}
+-(void) menuCallbackStart: (id) sender
+{
+	[[CCDirector sharedDirector] replaceScene:[CCTransitionFade transitionWithDuration:0.5f scene:[Layer2 scene]]];
+	//[(CCMultiplexLayer*)parent_ switchTo:2];
+}
+
+@end
+
+@implementation Layer2
 
 +(id) scene
 {
@@ -39,7 +78,7 @@ std::list<HitObject> hitObjects;
 	CCScene *scene = [CCScene node];
 	
 	// 'layer' is an autorelease object.
-	HelloWorld *layer = [HelloWorld node];
+	Layer2 *layer = [Layer2 node];
 	
 	// add layer as a child to scene
 	[scene addChild: layer];
