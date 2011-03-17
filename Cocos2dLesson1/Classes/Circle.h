@@ -7,14 +7,13 @@
 //
 
 #import "cocos2d.h"
+#import "HitObjectDisplay.h.mm"
 
-@interface Circle : CCLayer {
+@interface Circle : HitObjectDisplay {
 	CGSize size;
 }
 
-- (id) initWithColor: (int)red green: (int)green blue: (int)blue;
-- (void) appearWithDuration: (double)duration;
 - (CCRenderTexture*) createCircleTexture: (int)red :(int)green :(int)blue;
-- (void) setOpacity: (GLubyte) opacity;
+
 
 @end

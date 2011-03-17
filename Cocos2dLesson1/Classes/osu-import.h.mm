@@ -21,6 +21,7 @@
 typedef char * OSUString; // up for changing later
 
 struct HitObject {
+	HitObject() {}
 	HitObject(int x_, int y_, int startTimeMs_, int objectType_, int soundType_) :
 	x(x_), y(y_), startTimeMs(startTimeMs_), objectType(objectType_), soundType(soundType_) {}
 	

@@ -116,12 +116,8 @@ std::list<HitObject> hitObjects;
 		timer = [[Timer alloc] init];
 		
 		// Initialize Beatmap (C++)
-		beatmap = new Beatmap("mflo.osu");
-		
-		//circ = [[Circle alloc] init];
-		circ = [[Circle alloc] initWithColor:40 green:40 blue:0];
-		circ.position = ccp(480/2,320/2);
-		[self addChild: circ];
+		//beatmap = new Beatmap("mflo.osu");
+		beatmap = new Beatmap("gee_norm.osu");
 		
 		/*
 		seeker1 = [CCSprite spriteWithFile: @"seeker.png"];
@@ -140,14 +136,15 @@ std::list<HitObject> hitObjects;
 		
 		self.isTouchEnabled = YES;
 		
-		
+// this shit don't work in the simulator
+#if TARGET_OS_IPHONE
 		@try {
 			/* Music stuff */
 			musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
 			
 			MPMediaQuery * mfloQuery = [[MPMediaQuery alloc] init];
 			[mfloQuery addFilterPredicate: [MPMediaPropertyPredicate
-										predicateWithValue: @"The Love Bug"
+										predicateWithValue: @"Gee"
 										forProperty: MPMediaItemPropertyTitle]];
 			
 			[musicPlayer setQueueWithQuery:mfloQuery];
@@ -166,8 +163,8 @@ std::list<HitObject> hitObjects;
 		} @catch(NSException *e) {
 			cout << "no music playing dawg" << endl;
 		}
+#endif
 		/* cgpoints go from bottom left to top right like a graph */
-		
 		
 		
 		score = 0;
@@ -186,37 +183,47 @@ BOOL otherDirection = NO;
 	/***** Music Game Stuff ****/
 	
 	double milliseconds = [musicPlayer currentPlaybackTime] * 1000.0f;
-	milliseconds += 800; // acct for offset???
+	milliseconds += 1000; // offset for gee norm
 	//double milliseconds = [timer timeFromStart] * 1000.0f;
 	//milliseconds += 1000; // offset for m-flo
+	
 	
 	double durationS = 0.8; // seconds
 	double timeAllowanceMs = 150;
 	// Make stuff start to appear
 	while(!beatmap->hitObjects.empty()) {
 		HitObject o = beatmap->hitObjects.front(); 
-		//double timeAccordingToPlayer = [musicPlayer currentPlaybackTime];
-		//cout << o.startTimeMs << " " << milliseconds << " " << timeAccordingToPlayer <<  endl;
+		
+		// TODO:
+		// convert it into iphone space
+		o.x *= (480.-64.)/480.;
+		o.y *= (320.-64.)/320.;
+		
+		
 		if(milliseconds > o.startTimeMs) {
-			CGPoint location = CGPointMake(o.x, o.y);
-			location = [[CCDirector sharedDirector] convertToGL: location];
-			
 			cout << "making a circle" << endl;
-			Circle * c = [[Circle alloc] initWithColor: 0 green: 180 blue: 0];
-			c.position = location;
+			HitObjectDisplay * c = [[Circle alloc] initWithHitObject:o red:0 green:180 blue:0];
 			[self addChild:c];
 			[c appearWithDuration: durationS];
-			
 			circles.push_back(c);
-			hitObjects.push_back(o);
-			
-			
 			beatmap->hitObjects.pop_front();
 		}
 		else
 			break;
 	}
-
+	
+	while(!circles.empty()) {
+		HitObject o = circles.front().hitObject;
+		if(milliseconds > o.startTimeMs + timeAllowanceMs + (1000.0 * durationS)) {
+			cout << "asdf so yeah im getting rid of shit" << endl;
+			HitObjectDisplay * c = circles.front();
+			circles.pop_front();
+			[self removeChild:c cleanup:true];
+		}
+		else
+			break;
+	}
+	/*
 	while(!hitObjects.empty()) {
 		HitObject o = hitObjects.front();
 		if(milliseconds > o.startTimeMs + timeAllowanceMs + (1000.0 * durationS)) {
@@ -229,6 +236,7 @@ BOOL otherDirection = NO;
 		else
 			break;
 	}
+	 */
 
 	
 }
@@ -238,23 +246,36 @@ BOOL otherDirection = NO;
 	[[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
 }
 
+
+/*
+-(BOOL)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	
+}
+ */
+
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
 	CGPoint location = [self convertTouchToNodeSpace: touch];
 	
-	if(!hitObjects.empty()) {
-	HitObject o = hitObjects.front();
-	double dist = sqrt( pow(o.x - location.x, 2) + pow(o.y - location.y, 2));
-	int distInt = dist;
+	NSLog(@"%f %f", location.x, location.y);
 	
-	/*
-	hitObjects.pop_front();
-	Circle * c = circles.front();
-	circles.pop_front();
-	[self removeChild:c cleanup:true];
-	 */
+	if(!hitObjects.empty()) {
+		HitObject o = hitObjects.front();
+		double dist = sqrt( pow(o.x - location.x, 2) + pow(o.y - location.y, 2));
+		int distInt = dist;
+		
+		/*
+		hitObjects.pop_front();
+		Circle * c = circles.front();
+		circles.pop_front();
+		[self removeChild:c cleanup:true];
+		 */
+		
+		
 	
 		score += 1;
 		[scoreLabel setString:[NSString stringWithFormat:@"%d %d", score, distInt]];
+		NSLog(@"%d %d %f", o.x, o.y, location.x, location.y, dist);
+		//[scoreLabel setString:[NSString stringWithFormat:@"%d %d %d %d", o.x, location.x, o.y, location.y]];
 	}
 	else
 		[scoreLabel setString:[NSString stringWithFormat:@"%d X", score]];
