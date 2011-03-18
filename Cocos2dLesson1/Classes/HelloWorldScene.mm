@@ -14,6 +14,7 @@
 #import "Timer.h"
 #import "osu-import.h.mm"
 #import "HODSlider.h"
+#import "HitObjectDisplay.h.mm"
 
 #include "TargetConditionals.h"
 
@@ -38,6 +39,20 @@ Beatmap * beatmap;
 MPMusicPlayerController * musicPlayer;
 
 std::list<Circle*> circles;
+
+
+HitObjectDisplay* HODFactory(HitObject* hitObject, int r, int g, int b) {
+	if(hitObject->objectType & 1) { // bitmask for normal
+		return [[Circle alloc] initWithHitObject:hitObject red:r green:g blue:b];
+	}
+	else if(hitObject->objectType & 2) {
+		return [[HODSlider alloc] initWithHitObject:hitObject red:r green:g blue:b];
+	}
+	else {
+		// spinner, etc
+	}
+	return 0;
+}
 
 // HelloWorld implementation
 @implementation Layer1
@@ -182,11 +197,11 @@ std::list<Circle*> circles;
 		scoreLabel.position = ccp(430,200);
 		[self addChild: scoreLabel];
 		
-		
+		/*
 		HODSlider * s = [[HODSlider alloc] initWithHitObject:beatmap->hitObjects.front() red:4 green:5 blue:6];
 		[self addChild:s];
-		[s test];
-		[s appearWithDuration:1.0];
+		 */
+		
 	}
 	return self;
 }
@@ -219,10 +234,13 @@ BOOL otherDirection = NO;
 		if(milliseconds > o->startTimeMs) {
 			cout << o->x << " " << o->y << endl;
 			cout << "making a circle" << endl;
-			HitObjectDisplay * c = [[Circle alloc] initWithHitObject:o red:0 green:180 blue:0];
-			[self addChild:c];
-			[c appearWithDuration: durationS];
-			circles.push_back(c);
+			
+			HitObjectDisplay * hod = [[Circle alloc] initWithHitObject:o red:0 green:180 blue:0];
+			 
+			//HitObjectDisplay * hod = HODFactory(o, 0, 180, 0);
+			[self addChild:hod];
+			[hod appearWithDuration: durationS];
+			circles.push_back(hod);
 			beatmap->hitObjects.pop_front();
 		}
 		else
