@@ -13,6 +13,11 @@
 #import "Circle.h"
 #import "Timer.h"
 #import "osu-import.h.mm"
+#import "HODSlider.h"
+
+#include "TargetConditionals.h"
+
+
 #include <list>
 #include <iostream>
 using std::cout;
@@ -33,7 +38,6 @@ Beatmap * beatmap;
 MPMusicPlayerController * musicPlayer;
 
 std::list<Circle*> circles;
-std::list<HitObject> hitObjects;
 
 // HelloWorld implementation
 @implementation Layer1
@@ -119,6 +123,10 @@ std::list<HitObject> hitObjects;
 		//beatmap = new Beatmap("mflo.osu");
 		beatmap = new Beatmap("gee_norm.osu");
 		
+		for(std::list<HitObject*>::iterator it = beatmap->hitObjects.begin(); it != beatmap->hitObjects.end(); ++it) {
+			cout << "for loop: " << (*it)->x << " " << (*it)->y << endl;
+		}
+		
 		/*
 		seeker1 = [CCSprite spriteWithFile: @"seeker.png"];
 		seeker1.position = ccp(50, 100);
@@ -137,7 +145,8 @@ std::list<HitObject> hitObjects;
 		self.isTouchEnabled = YES;
 		
 // this shit don't work in the simulator
-#if TARGET_OS_IPHONE
+#if !(TARGET_IPHONE_SIMULATOR)
+
 		@try {
 			/* Music stuff */
 			musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
@@ -172,6 +181,12 @@ std::list<HitObject> hitObjects;
 		//scoreLabel.anchorPoint = ccp([scoreLabel contentSize].width,[scoreLabel contentSize].height);
 		scoreLabel.position = ccp(430,200);
 		[self addChild: scoreLabel];
+		
+		
+		HODSlider * s = [[HODSlider alloc] initWithHitObject:beatmap->hitObjects.front() red:4 green:5 blue:6];
+		[self addChild:s];
+		[s test];
+		[s appearWithDuration:1.0];
 	}
 	return self;
 }
@@ -192,15 +207,17 @@ BOOL otherDirection = NO;
 	double timeAllowanceMs = 150;
 	// Make stuff start to appear
 	while(!beatmap->hitObjects.empty()) {
-		HitObject o = beatmap->hitObjects.front(); 
-		
+		HitObject * o = beatmap->hitObjects.front(); 
+		//cout << o->x << " " << o->y << endl;
 		// TODO:
 		// convert it into iphone space
-		o.x *= (480.-64.)/480.;
-		o.y *= (320.-64.)/320.;
+		/*
+		o->x *= (480.-64.)/480.;
+		o->y *= (320.-64.)/320.;
+		*/
 		
-		
-		if(milliseconds > o.startTimeMs) {
+		if(milliseconds > o->startTimeMs) {
+			cout << o->x << " " << o->y << endl;
 			cout << "making a circle" << endl;
 			HitObjectDisplay * c = [[Circle alloc] initWithHitObject:o red:0 green:180 blue:0];
 			[self addChild:c];
@@ -213,8 +230,8 @@ BOOL otherDirection = NO;
 	}
 	
 	while(!circles.empty()) {
-		HitObject o = circles.front().hitObject;
-		if(milliseconds > o.startTimeMs + timeAllowanceMs + (1000.0 * durationS)) {
+		HitObject * o = circles.front().hitObject;
+		if(milliseconds > o->startTimeMs + timeAllowanceMs + (1000.0 * durationS)) {
 			cout << "asdf so yeah im getting rid of shit" << endl;
 			HitObjectDisplay * c = circles.front();
 			circles.pop_front();
@@ -258,9 +275,9 @@ BOOL otherDirection = NO;
 	
 	NSLog(@"%f %f", location.x, location.y);
 	
-	if(!hitObjects.empty()) {
-		HitObject o = hitObjects.front();
-		double dist = sqrt( pow(o.x - location.x, 2) + pow(o.y - location.y, 2));
+	if(!circles.empty()) {
+		HitObject * o = circles.front().hitObject;
+		double dist = sqrt( pow(o->x - location.x, 2) + pow(o->y - location.y, 2));
 		int distInt = dist;
 		
 		/*
@@ -274,7 +291,7 @@ BOOL otherDirection = NO;
 	
 		score += 1;
 		[scoreLabel setString:[NSString stringWithFormat:@"%d %d", score, distInt]];
-		NSLog(@"%d %d %f", o.x, o.y, location.x, location.y, dist);
+		NSLog(@"%d %d %f", o->x, o->y, location.x, location.y, dist);
 		//[scoreLabel setString:[NSString stringWithFormat:@"%d %d %d %d", o.x, location.x, o.y, location.y]];
 	}
 	else

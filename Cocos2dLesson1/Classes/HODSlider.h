@@ -9,9 +9,13 @@
 #import "cocos2d.h"
 #import "HitObjectDisplay.h.mm"
 #import "Circle.h"
+#import "FRCurve.h"
+#import "FRLines.h"
 
 @interface HODSlider : Circle {
-	HitObjectDisplay c;
+	FRCurve * curve;
 }
+
+- (void) test;
 
 @end

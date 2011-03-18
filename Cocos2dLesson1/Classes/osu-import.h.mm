@@ -43,7 +43,7 @@ struct HitSlider : public HitObject {
 	int sliderLengthPixels;
 };
 
-struct HitSpinner : HitObject {
+struct HitSpinner : public HitObject {
 	HitSpinner(int x_, int y_, int startTimeMs_, int objectType_, int soundType_, std::stringstream& ss);
 	
 	int endTimeMs;
@@ -87,7 +87,7 @@ public:
 	std::vector<RGBColor> comboColors;
 	
 	// [HitObjects]
-	std::list<HitObject> hitObjects;
+	std::list<HitObject *> hitObjects;
 };
 
 

@@ -41,6 +41,10 @@
 		507ED64211C638C6002ED3FC /* CocosDenshion.m in Sources */ = {isa = PBXBuildFile; fileRef = 507ED63911C638C6002ED3FC /* CocosDenshion.m */; };
 		507ED64311C638C6002ED3FC /* SimpleAudioEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 507ED63A11C638C6002ED3FC /* SimpleAudioEngine.h */; };
 		507ED64411C638C6002ED3FC /* SimpleAudioEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 507ED63B11C638C6002ED3FC /* SimpleAudioEngine.m */; };
+		507FCF6D13330452005D2A6F /* FRCurveActions.m in Sources */ = {isa = PBXBuildFile; fileRef = 507FCF6813330452005D2A6F /* FRCurveActions.m */; };
+		507FCF6E13330452005D2A6F /* FRCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = 507FCF6A13330452005D2A6F /* FRCurve.m */; };
+		507FCF6F13330452005D2A6F /* FRLines.m in Sources */ = {isa = PBXBuildFile; fileRef = 507FCF6C13330452005D2A6F /* FRLines.m */; };
+		507FCF7713330477005D2A6F /* CCTextureCache+More.m in Sources */ = {isa = PBXBuildFile; fileRef = 507FCF7413330477005D2A6F /* CCTextureCache+More.m */; };
 		50882F7813253A6F00C6289B /* seeker.png in Resources */ = {isa = PBXBuildFile; fileRef = 50882F7713253A6F00C6289B /* seeker.png */; };
 		50882F91132541F400C6289B /* Circle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50882F90132541F400C6289B /* Circle.mm */; };
 		50882FAB13254F9A00C6289B /* button.button.png in Resources */ = {isa = PBXBuildFile; fileRef = 50882FA713254F9900C6289B /* button.button.png */; };
@@ -308,6 +312,16 @@
 		507ED63911C638C6002ED3FC /* CocosDenshion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CocosDenshion.m; sourceTree = "<group>"; };
 		507ED63A11C638C6002ED3FC /* SimpleAudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleAudioEngine.h; sourceTree = "<group>"; };
 		507ED63B11C638C6002ED3FC /* SimpleAudioEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleAudioEngine.m; sourceTree = "<group>"; };
+		507FCF6713330452005D2A6F /* FRCurveActions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRCurveActions.h; sourceTree = "<group>"; };
+		507FCF6813330452005D2A6F /* FRCurveActions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRCurveActions.m; sourceTree = "<group>"; };
+		507FCF6913330452005D2A6F /* FRCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRCurve.h; sourceTree = "<group>"; };
+		507FCF6A13330452005D2A6F /* FRCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRCurve.m; sourceTree = "<group>"; };
+		507FCF6B13330452005D2A6F /* FRLines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FRLines.h; sourceTree = "<group>"; };
+		507FCF6C13330452005D2A6F /* FRLines.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FRLines.m; sourceTree = "<group>"; };
+		507FCF7313330477005D2A6F /* CCTextureCache+More.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CCTextureCache+More.h"; sourceTree = "<group>"; };
+		507FCF7413330477005D2A6F /* CCTextureCache+More.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CCTextureCache+More.m"; sourceTree = "<group>"; };
+		507FCF7513330477005D2A6F /* CCTextureSynthesis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCTextureSynthesis.h; sourceTree = "<group>"; };
+		507FCF7613330477005D2A6F /* CCTypes+More.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CCTypes+More.h"; sourceTree = "<group>"; };
 		50882F7713253A6F00C6289B /* seeker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = seeker.png; sourceTree = "<group>"; };
 		50882F8F132541F400C6289B /* Circle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Circle.h; sourceTree = "<group>"; };
 		50882F90132541F400C6289B /* Circle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Circle.mm; sourceTree = "<group>"; };
@@ -624,6 +638,8 @@
 		2D500B1D0D5A766B00DBA0E3 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				507FCF7213330477005D2A6F /* helpers */,
+				507FCF6613330452005D2A6F /* ShapeNodes */,
 				50883176132583F700C6289B /* Timer.h */,
 				50883177132583F700C6289B /* Timer.m */,
 				508831881325845A00C6289B /* Utility.h */,
@@ -688,6 +704,30 @@
 			);
 			name = CocosDenshion;
 			path = libs/CocosDenshion;
+			sourceTree = "<group>";
+		};
+		507FCF6613330452005D2A6F /* ShapeNodes */ = {
+			isa = PBXGroup;
+			children = (
+				507FCF6713330452005D2A6F /* FRCurveActions.h */,
+				507FCF6813330452005D2A6F /* FRCurveActions.m */,
+				507FCF6913330452005D2A6F /* FRCurve.h */,
+				507FCF6A13330452005D2A6F /* FRCurve.m */,
+				507FCF6B13330452005D2A6F /* FRLines.h */,
+				507FCF6C13330452005D2A6F /* FRLines.m */,
+			);
+			path = ShapeNodes;
+			sourceTree = "<group>";
+		};
+		507FCF7213330477005D2A6F /* helpers */ = {
+			isa = PBXGroup;
+			children = (
+				507FCF7313330477005D2A6F /* CCTextureCache+More.h */,
+				507FCF7413330477005D2A6F /* CCTextureCache+More.m */,
+				507FCF7513330477005D2A6F /* CCTextureSynthesis.h */,
+				507FCF7613330477005D2A6F /* CCTypes+More.h */,
+			);
+			path = helpers;
 			sourceTree = "<group>";
 		};
 		50F41306106926B2002A0D5E /* FontLabel */ = {
@@ -1205,6 +1245,10 @@
 				5088318A1325845A00C6289B /* Utility.mm in Sources */,
 				5004717A133138D100454BF4 /* HitObjectDisplay.mm in Sources */,
 				5004723B13314F0300454BF4 /* HODSlider.mm in Sources */,
+				507FCF6D13330452005D2A6F /* FRCurveActions.m in Sources */,
+				507FCF6E13330452005D2A6F /* FRCurve.m in Sources */,
+				507FCF6F13330452005D2A6F /* FRLines.m in Sources */,
+				507FCF7713330477005D2A6F /* CCTextureCache+More.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

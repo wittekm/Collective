@@ -13,13 +13,13 @@
 
 @synthesize hitObject;
 
-- (id) initWithHitObject: (HitObject)hitObject_ red: (int)r green: (int)g blue: (int)b {
+- (id) initWithHitObject: (HitObject*)hitObject_ red: (int)r green: (int)g blue: (int)b {
 	if( (self=[super init]) ) {
 		hitObject = hitObject_;
 		red = r;
 		green = g;
 		blue = b;
-		self.position = CGPointMake(hitObject.x, hitObject.y);
+		self.position = CGPointMake(hitObject->x * 1.0, hitObject->y * 1.0);
 	}
 	return self;
 }

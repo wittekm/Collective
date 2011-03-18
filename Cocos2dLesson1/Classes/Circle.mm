@@ -16,7 +16,7 @@ CCSprite * ring;
 
 // on "init" you need to initialize your instance
 
-- (id) initWithHitObject:(HitObject)hitObject_ red:(int)r green:(int)g blue:(int)b
+- (id) initWithHitObject:(HitObject*)hitObject_ red:(int)r green:(int)g blue:(int)b
 {
 	if( (self = [super initWithHitObject:hitObject_ red:r green:g blue:b]) ) {
 		self.visible = false;

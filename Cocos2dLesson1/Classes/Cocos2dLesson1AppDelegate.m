@@ -12,6 +12,7 @@
 #import "GameConfig.h"
 #import "HelloWorldScene.h"
 #import "RootViewController.h"
+#import <MediaPlayer/MediaPlayer.h>
 
 @implementation Cocos2dLesson1AppDelegate
 
@@ -120,6 +121,9 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application {
 	[[CCDirector sharedDirector] pause];
+	
+	MPMusicPlayerController * musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
+	[musicPlayer stop];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
@@ -132,6 +136,14 @@
 
 -(void) applicationDidEnterBackground:(UIApplication*)application {
 	[[CCDirector sharedDirector] stopAnimation];
+	
+#if !(TARGET_IPHONE_SIMULATOR)
+	
+	MPMusicPlayerController * musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
+	[musicPlayer stop];
+	
+#endif
+	
 }
 
 -(void) applicationWillEnterForeground:(UIApplication*)application {
@@ -139,6 +151,11 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+	
+	MPMusicPlayerController * musicPlayer = [MPMusicPlayerController iPodMusicPlayer];
+	[musicPlayer stop];
+	
+	
 	CCDirector *director = [CCDirector sharedDirector];
 	
 	[[director openGLView] removeFromSuperview];

@@ -67,7 +67,7 @@ HitSpinner::HitSpinner(int x_, int y_, int startTimeMs_, int objectType_, int so
 	stringstream(word) >> endTimeMs;
 }
 
-HitObject readHitObject(string line) {
+HitObject * readHitObject(string line) {
 	int hoVals[5]; // hit object vals
 	stringstream lineStream(line);
 	string word;
@@ -75,31 +75,30 @@ HitObject readHitObject(string line) {
 		stringstream(word) >> hoVals[wordState];
 	}
 	
+	cout << hoVals[0] << " " << hoVals[1] << endl;
+	
 	// normal or normalnewcombo
 	if((hoVals[3] & 1)) 
 	{
-		HitObject toReturn(hoVals[0], hoVals[1], hoVals[2], hoVals[3], hoVals[4]);
-		return toReturn;
+		return new HitObject(hoVals[0], hoVals[1], hoVals[2], hoVals[3], hoVals[4]);
 	}
 	
 	// slider or sliderNewCombo
 	else if((hoVals[3] & 2)) 
 	{
-		HitSlider toReturn(hoVals[0], hoVals[1], hoVals[2], hoVals[3], hoVals[4], lineStream);
-		return toReturn;
+		return new HitSlider(hoVals[0], hoVals[1], hoVals[2], hoVals[3], hoVals[4], lineStream);
 	}
 	
 	// spinner
 	else if((hoVals[3] & 8)) 
 	{
-		HitSpinner toReturn(hoVals[0], hoVals[1], hoVals[2], hoVals[3], hoVals[4], lineStream);
-		return toReturn;
+		return new HitSpinner(hoVals[0], hoVals[1], hoVals[2], hoVals[3], hoVals[4], lineStream);
 	}
 	
 	else
 	{
 		assert(0);
-		return HitObject(0,0,0,0,0);
+		return 0;
 	}
 }
 
@@ -132,7 +131,7 @@ std::ostream& operator<<(std::ostream& os, const HitObject& o) {
 		 
 		 // read in a HitObject
 		 if(state == 100 && line != "\r") {
-			 HitObject h = readHitObject(line);
+			 HitObject * h = readHitObject(line);
 			 hitObjects.push_back(h);
 		 }
 		 
