@@ -56,6 +56,11 @@ HitSlider::HitSlider(int x_, int y_, int startTimeMs_, int objectType_, int soun
 		int num1int, num2int;
 		stringstream(num1) >> num1int;
 		stringstream(num2) >> num2int;
+		
+		// Put them into iphone space
+		num1int *= (480.-64.)/480.;
+		num2int *= (320.-64.)/320.;
+		
 		sliderPoints.push_back(make_pair(num1int, num2int));
 	}
 }
@@ -75,7 +80,11 @@ HitObject * readHitObject(string line) {
 		stringstream(word) >> hoVals[wordState];
 	}
 	
-	cout << hoVals[0] << " " << hoVals[1] << endl;
+	//cout << hoVals[0] << " " << hoVals[1] << endl;
+	
+	// Put them into iphone space
+	hoVals[0] *= (480.-64.)/480.;
+	hoVals[1] *= (320.-64.)/320.;
 	
 	// normal or normalnewcombo
 	if((hoVals[3] & 1)) 

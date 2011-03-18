@@ -11,7 +11,6 @@
 #import "CCTouchDispatcher.h"
 #import "HelloWorldScene.h"
 #import "Circle.h"
-#import "Timer.h"
 #import "osu-import.h.mm"
 #import "HODSlider.h"
 #import "HitObjectDisplay.h.mm"
@@ -28,12 +27,6 @@ using std::vector;
 CCLabelTTF * scoreLabel;
 int score;
 
-CCSprite * seeker1;
-CCSprite *cocosGuy;
-
-Circle * circ;
-
-Timer * timer;
 Beatmap * beatmap;
 
 MPMusicPlayerController * musicPlayer;
@@ -49,7 +42,8 @@ HitObjectDisplay* HODFactory(HitObject* hitObject, int r, int g, int b) {
 		return [[HODSlider alloc] initWithHitObject:hitObject red:r green:g blue:b];
 	}
 	else {
-		// spinner, etc
+		// this is just a "unknown type" circle, we haven't done spinner yet
+		return [[Circle alloc] initWithHitObject:hitObject red:150 green:0 blue:0];
 	}
 	return 0;
 }
@@ -117,44 +111,12 @@ HitObjectDisplay* HODFactory(HitObject* hitObject, int r, int g, int b) {
 	// always call "super" init
 	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super init] )) {
-		/*
-		// create and initialize a Label
-		CCLabelTTF *label = [CCLabelTTF labelWithString:@"Hello World" fontName:@"Marker Felt" fontSize:64];
-
-		// ask director the the window size
-		CGSize size = [[CCDirector sharedDirector] winSize];
-	
-		// position the label on the center of the screen
-		label.position =  ccp( size.width /2 , size.height/2 );
-		
-		// add the label as a child to this Layer
-		[self addChild: label];
-		 */
-		
 		// Initialize Timer
-		timer = [[Timer alloc] init];
 		
 		// Initialize Beatmap (C++)
 		//beatmap = new Beatmap("mflo.osu");
 		beatmap = new Beatmap("gee_norm.osu");
 		
-		for(std::list<HitObject*>::iterator it = beatmap->hitObjects.begin(); it != beatmap->hitObjects.end(); ++it) {
-			cout << "for loop: " << (*it)->x << " " << (*it)->y << endl;
-		}
-		
-		/*
-		seeker1 = [CCSprite spriteWithFile: @"seeker.png"];
-		seeker1.position = ccp(50, 100);
-		[self addChild:seeker1];
-		
-		cocosGuy = [CCSprite spriteWithFile:@"Icon.png"];
-		cocosGuy.position = ccp(200, 300);
-		[self addChild:cocosGuy];
-		
-		seeker1.position = ccp(-400, -400);
-		cocosGuy.position = ccp(-400, -400);
-		*/
-		 
 		[self schedule:@selector(nextFrame:)];
 		
 		self.isTouchEnabled = YES;
@@ -173,7 +135,6 @@ HitObjectDisplay* HODFactory(HitObject* hitObject, int r, int g, int b) {
 			
 			[musicPlayer setQueueWithQuery:mfloQuery];
 			[musicPlayer play];
-			[timer startTimer];
 			
 			
 			// Artwork
@@ -224,20 +185,15 @@ BOOL otherDirection = NO;
 	while(!beatmap->hitObjects.empty()) {
 		HitObject * o = beatmap->hitObjects.front(); 
 		//cout << o->x << " " << o->y << endl;
-		// TODO:
-		// convert it into iphone space
-		/*
-		o->x *= (480.-64.)/480.;
-		o->y *= (320.-64.)/320.;
-		*/
+		
 		
 		if(milliseconds > o->startTimeMs) {
 			cout << o->x << " " << o->y << endl;
 			cout << "making a circle" << endl;
 			
-			HitObjectDisplay * hod = [[Circle alloc] initWithHitObject:o red:0 green:180 blue:0];
+			//HitObjectDisplay * hod = [[Circle alloc] initWithHitObject:o red:0 green:180 blue:0];
 			 
-			//HitObjectDisplay * hod = HODFactory(o, 0, 180, 0);
+			HitObjectDisplay * hod = HODFactory(o, 0, 120, 0);
 			[self addChild:hod];
 			[hod appearWithDuration: durationS];
 			circles.push_back(hod);
@@ -258,20 +214,6 @@ BOOL otherDirection = NO;
 		else
 			break;
 	}
-	/*
-	while(!hitObjects.empty()) {
-		HitObject o = hitObjects.front();
-		if(milliseconds > o.startTimeMs + timeAllowanceMs + (1000.0 * durationS)) {
-			cout << "asdf so yeah im getting rid of shit" << endl;
-			hitObjects.pop_front();
-			Circle * c = circles.front();
-			circles.pop_front();
-			[self removeChild:c cleanup:true];
-		}
-		else
-			break;
-	}
-	 */
 
 	
 }
@@ -299,18 +241,14 @@ BOOL otherDirection = NO;
 		int distInt = dist;
 		
 		/*
-		hitObjects.pop_front();
 		Circle * c = circles.front();
 		circles.pop_front();
 		[self removeChild:c cleanup:true];
 		 */
-		
-		
 	
 		score += 1;
 		[scoreLabel setString:[NSString stringWithFormat:@"%d %d", score, distInt]];
 		NSLog(@"%d %d %f", o->x, o->y, location.x, location.y, dist);
-		//[scoreLabel setString:[NSString stringWithFormat:@"%d %d %d %d", o.x, location.x, o.y, location.y]];
 	}
 	else
 		[scoreLabel setString:[NSString stringWithFormat:@"%d X", score]];
@@ -321,16 +259,6 @@ BOOL otherDirection = NO;
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
 	CGPoint location = [self convertTouchToNodeSpace: touch];
 	
-	//[self runAction: [CCRipple3D actionWithPosition: location radius: 48 waves: 1 amplitude: 90 grid: ccg(4,4) duration: 0.75]];
-	
-	
-	/*
-	Circle * circ = [[Circle alloc] initWithColor: 120 green: 0 blue: 0];
-	circ.position = location;
-	[self addChild:circ];
-	
-	[circ appearWithDuration:2.0];
-	*/
 }
 
 

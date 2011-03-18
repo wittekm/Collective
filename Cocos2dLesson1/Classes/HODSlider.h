@@ -16,6 +16,4 @@
 	FRCurve * curve;
 }
 
-- (void) test;
-
 @end

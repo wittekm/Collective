@@ -55,7 +55,6 @@
 		508831701325834F00C6289B /* osu-import.h.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5088316E1325834F00C6289B /* osu-import.h.mm */; };
 		508831711325834F00C6289B /* osu-import.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5088316F1325834F00C6289B /* osu-import.mm */; };
 		508831731325835700C6289B /* mflo.osu in Resources */ = {isa = PBXBuildFile; fileRef = 508831721325835700C6289B /* mflo.osu */; };
-		50883178132583F700C6289B /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = 50883177132583F700C6289B /* Timer.m */; };
 		5088318A1325845A00C6289B /* Utility.mm in Sources */ = {isa = PBXBuildFile; fileRef = 508831891325845A00C6289B /* Utility.mm */; };
 		508831E3132691DD00C6289B /* button.ring.png in Resources */ = {isa = PBXBuildFile; fileRef = 508831E2132691DD00C6289B /* button.ring.png */; };
 		50B613401328348C00ADEB5B /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50B6133F1328348C00ADEB5B /* MediaPlayer.framework */; };
@@ -333,8 +332,6 @@
 		5088316E1325834F00C6289B /* osu-import.h.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "osu-import.h.mm"; sourceTree = "<group>"; };
 		5088316F1325834F00C6289B /* osu-import.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "osu-import.mm"; sourceTree = "<group>"; };
 		508831721325835700C6289B /* mflo.osu */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = mflo.osu; sourceTree = "<group>"; };
-		50883176132583F700C6289B /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
-		50883177132583F700C6289B /* Timer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Timer.m; sourceTree = "<group>"; };
 		508831881325845A00C6289B /* Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		508831891325845A00C6289B /* Utility.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Utility.mm; sourceTree = "<group>"; };
 		508831E2132691DD00C6289B /* button.ring.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button.ring.png; sourceTree = "<group>"; };
@@ -638,18 +635,11 @@
 		2D500B1D0D5A766B00DBA0E3 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				507FCF7213330477005D2A6F /* helpers */,
-				507FCF6613330452005D2A6F /* ShapeNodes */,
-				50883176132583F700C6289B /* Timer.h */,
-				50883177132583F700C6289B /* Timer.m */,
+				507FD0DD1333C366005D2A6F /* HitObjectDisplays */,
 				508831881325845A00C6289B /* Utility.h */,
 				508831891325845A00C6289B /* Utility.mm */,
 				5088316E1325834F00C6289B /* osu-import.h.mm */,
 				5088316F1325834F00C6289B /* osu-import.mm */,
-				50882F8F132541F400C6289B /* Circle.h */,
-				50882F90132541F400C6289B /* Circle.mm */,
-				5004723913314F0300454BF4 /* HODSlider.h */,
-				5004723A13314F0300454BF4 /* HODSlider.mm */,
 				E0F80F5D120A0182005866B8 /* GameConfig.h */,
 				506EDC2F102F528A00A389B3 /* HelloWorldScene.h */,
 				506EDC30102F528A00A389B3 /* HelloWorldScene.mm */,
@@ -657,8 +647,8 @@
 				E0F80F5F120A0182005866B8 /* RootViewController.m */,
 				1F3B9A2C0EF2145700286867 /* Cocos2dLesson1AppDelegate.h */,
 				1F3B9A2B0EF2145700286867 /* Cocos2dLesson1AppDelegate.m */,
-				50047178133138D100454BF4 /* HitObjectDisplay.h.mm */,
-				50047179133138D100454BF4 /* HitObjectDisplay.mm */,
+				507FCF7213330477005D2A6F /* helpers */,
+				507FCF6613330452005D2A6F /* ShapeNodes */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -728,6 +718,19 @@
 				507FCF7613330477005D2A6F /* CCTypes+More.h */,
 			);
 			path = helpers;
+			sourceTree = "<group>";
+		};
+		507FD0DD1333C366005D2A6F /* HitObjectDisplays */ = {
+			isa = PBXGroup;
+			children = (
+				50882F8F132541F400C6289B /* Circle.h */,
+				50882F90132541F400C6289B /* Circle.mm */,
+				5004723913314F0300454BF4 /* HODSlider.h */,
+				5004723A13314F0300454BF4 /* HODSlider.mm */,
+				50047178133138D100454BF4 /* HitObjectDisplay.h.mm */,
+				50047179133138D100454BF4 /* HitObjectDisplay.mm */,
+			);
+			name = HitObjectDisplays;
 			sourceTree = "<group>";
 		};
 		50F41306106926B2002A0D5E /* FontLabel */ = {
@@ -1241,7 +1244,6 @@
 				50882F91132541F400C6289B /* Circle.mm in Sources */,
 				508831701325834F00C6289B /* osu-import.h.mm in Sources */,
 				508831711325834F00C6289B /* osu-import.mm in Sources */,
-				50883178132583F700C6289B /* Timer.m in Sources */,
 				5088318A1325845A00C6289B /* Utility.mm in Sources */,
 				5004717A133138D100454BF4 /* HitObjectDisplay.mm in Sources */,
 				5004723B13314F0300454BF4 /* HODSlider.mm in Sources */,

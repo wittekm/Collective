@@ -39,4 +39,9 @@
 	}
 }
 
+- (void) dealloc {
+	[super dealloc];
+	delete hitObject;
+}
+
 @end
