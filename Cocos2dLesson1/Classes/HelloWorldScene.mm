@@ -15,6 +15,8 @@
 #import "HODSlider.h"
 #import "HitObjectDisplay.h.mm"
 
+#import "FRCurve.h"
+
 #include "TargetConditionals.h"
 
 
@@ -32,6 +34,11 @@ Beatmap * beatmap;
 MPMusicPlayerController * musicPlayer;
 
 std::list<Circle*> circles;
+
+int zOrder = INT_MAX;
+
+CGPoint start_;
+CGPoint end_;
 
 
 HitObjectDisplay* HODFactory(HitObject* hitObject, int r, int g, int b) {
@@ -145,6 +152,9 @@ HitObjectDisplay* HODFactory(HitObject* hitObject, int r, int g, int b) {
 			CCSprite * albumArt = [CCSprite spriteWithCGImage:[artworkImage CGImage]];
 			albumArt.position = ccp(480/2, 320/2);
 			[self addChild:albumArt];
+			
+			[musicPlayer setCurrentPlaybackTime:18]; // skip intro
+			
 		} @catch(NSException *e) {
 			cout << "no music playing dawg" << endl;
 		}
@@ -158,10 +168,10 @@ HitObjectDisplay* HODFactory(HitObject* hitObject, int r, int g, int b) {
 		scoreLabel.position = ccp(430,200);
 		[self addChild: scoreLabel];
 		
-		/*
-		HODSlider * s = [[HODSlider alloc] initWithHitObject:beatmap->hitObjects.front() red:4 green:5 blue:6];
-		[self addChild:s];
-		 */
+		
+		
+		//HODSlider * s = [[HODSlider alloc] initWithHitObject:beatmap->hitObjects.front() red:0 green:0 blue:100];
+		//[self addChild:s];
 		
 	}
 	return self;
@@ -194,7 +204,7 @@ BOOL otherDirection = NO;
 			//HitObjectDisplay * hod = [[Circle alloc] initWithHitObject:o red:0 green:180 blue:0];
 			 
 			HitObjectDisplay * hod = HODFactory(o, 0, 120, 0);
-			[self addChild:hod];
+			[self addChild:hod z:zOrder--];
 			[hod appearWithDuration: durationS];
 			circles.push_back(hod);
 			beatmap->hitObjects.pop_front();
@@ -239,12 +249,6 @@ BOOL otherDirection = NO;
 		HitObject * o = circles.front().hitObject;
 		double dist = sqrt( pow(o->x - location.x, 2) + pow(o->y - location.y, 2));
 		int distInt = dist;
-		
-		/*
-		Circle * c = circles.front();
-		circles.pop_front();
-		[self removeChild:c cleanup:true];
-		 */
 	
 		score += 1;
 		[scoreLabel setString:[NSString stringWithFormat:@"%d %d", score, distInt]];

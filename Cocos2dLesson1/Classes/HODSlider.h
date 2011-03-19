@@ -12,8 +12,10 @@
 #import "FRCurve.h"
 #import "FRLines.h"
 
-@interface HODSlider : Circle {
+@interface HODSlider : HitObjectDisplay {
 	FRCurve * curve;
+	CGSize size;
+	CCSprite * ring;
 }
 
 @end

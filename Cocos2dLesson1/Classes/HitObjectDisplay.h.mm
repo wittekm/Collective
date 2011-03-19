@@ -21,6 +21,8 @@
 - (void) appearWithDuration: (double)duration;
 - (void) setOpacity: (GLubyte) opacity;
 
+// stuff pertaining to touch processing
+
 @property HitObject* hitObject;
 
 @end

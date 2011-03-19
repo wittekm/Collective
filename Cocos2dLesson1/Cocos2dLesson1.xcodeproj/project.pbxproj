@@ -11,6 +11,7 @@
 		1F3B9A2D0EF2145700286867 /* Cocos2dLesson1AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1F3B9A2B0EF2145700286867 /* Cocos2dLesson1AppDelegate.m */; };
 		5004717A133138D100454BF4 /* HitObjectDisplay.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50047179133138D100454BF4 /* HitObjectDisplay.mm */; };
 		5004723B13314F0300454BF4 /* HODSlider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5004723A13314F0300454BF4 /* HODSlider.mm */; };
+		5014FE7C13349DAB0073730C /* button.underlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 5014FE7B13349DAB0073730C /* button.underlay.png */; };
 		5044DFD6132C9C5200FCC0FF /* gee_norm.osu in Resources */ = {isa = PBXBuildFile; fileRef = 5044DFD5132C9C5200FCC0FF /* gee_norm.osu */; };
 		504DFBCE10AF12E9006D82FE /* CLScoreServerPost.h in Headers */ = {isa = PBXBuildFile; fileRef = 504DFBC810AF12E9006D82FE /* CLScoreServerPost.h */; };
 		504DFBCF10AF12E9006D82FE /* CLScoreServerPost.m in Sources */ = {isa = PBXBuildFile; fileRef = 504DFBC910AF12E9006D82FE /* CLScoreServerPost.m */; };
@@ -49,7 +50,6 @@
 		50882F91132541F400C6289B /* Circle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50882F90132541F400C6289B /* Circle.mm */; };
 		50882FAB13254F9A00C6289B /* button.button.png in Resources */ = {isa = PBXBuildFile; fileRef = 50882FA713254F9900C6289B /* button.button.png */; };
 		50882FAD13254F9A00C6289B /* button.overlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 50882FA913254F9A00C6289B /* button.overlay.png */; };
-		50882FAE13254F9A00C6289B /* button.underlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 50882FAA13254F9A00C6289B /* button.underlay.png */; };
 		508830AD1325678F00C6289B /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 508830AC1325678F00C6289B /* Icon.png */; };
 		508830D51325693900C6289B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 508830D41325693900C6289B /* Default.png */; };
 		508831701325834F00C6289B /* osu-import.h.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5088316E1325834F00C6289B /* osu-import.h.mm */; };
@@ -285,6 +285,7 @@
 		50047179133138D100454BF4 /* HitObjectDisplay.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HitObjectDisplay.mm; sourceTree = "<group>"; };
 		5004723913314F0300454BF4 /* HODSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HODSlider.h; sourceTree = "<group>"; };
 		5004723A13314F0300454BF4 /* HODSlider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = HODSlider.mm; sourceTree = "<group>"; };
+		5014FE7B13349DAB0073730C /* button.underlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = button.underlay.png; sourceTree = "<group>"; };
 		5044DFD5132C9C5200FCC0FF /* gee_norm.osu */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = gee_norm.osu; sourceTree = "<group>"; };
 		504DFBC810AF12E9006D82FE /* CLScoreServerPost.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLScoreServerPost.h; sourceTree = "<group>"; };
 		504DFBC910AF12E9006D82FE /* CLScoreServerPost.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLScoreServerPost.m; sourceTree = "<group>"; };
@@ -326,7 +327,6 @@
 		50882F90132541F400C6289B /* Circle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Circle.mm; sourceTree = "<group>"; };
 		50882FA713254F9900C6289B /* button.button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button.button.png; path = hitObjectButton/button.button.png; sourceTree = "<group>"; };
 		50882FA913254F9A00C6289B /* button.overlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button.overlay.png; path = hitObjectButton/button.overlay.png; sourceTree = "<group>"; };
-		50882FAA13254F9A00C6289B /* button.underlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = button.underlay.png; path = hitObjectButton/button.underlay.png; sourceTree = "<group>"; };
 		508830AC1325678F00C6289B /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		508830D41325693900C6289B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		5088316E1325834F00C6289B /* osu-import.h.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "osu-import.h.mm"; sourceTree = "<group>"; };
@@ -795,13 +795,13 @@
 		50F414EB1069373D002A0D5E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				5014FE7B13349DAB0073730C /* button.underlay.png */,
 				508831E2132691DD00C6289B /* button.ring.png */,
 				508831721325835700C6289B /* mflo.osu */,
 				5044DFD5132C9C5200FCC0FF /* gee_norm.osu */,
 				508830D41325693900C6289B /* Default.png */,
 				50882FA713254F9900C6289B /* button.button.png */,
 				50882FA913254F9A00C6289B /* button.overlay.png */,
-				50882FAA13254F9A00C6289B /* button.underlay.png */,
 				50882F7713253A6F00C6289B /* seeker.png */,
 				E02BB762126CC1E0006E46A2 /* iTunesArtwork */,
 				E02BB4FE126CA50F006E46A2 /* Icon@2x.png */,
@@ -1221,12 +1221,12 @@
 				50882F7813253A6F00C6289B /* seeker.png in Resources */,
 				50882FAB13254F9A00C6289B /* button.button.png in Resources */,
 				50882FAD13254F9A00C6289B /* button.overlay.png in Resources */,
-				50882FAE13254F9A00C6289B /* button.underlay.png in Resources */,
 				508830AD1325678F00C6289B /* Icon.png in Resources */,
 				508830D51325693900C6289B /* Default.png in Resources */,
 				508831731325835700C6289B /* mflo.osu in Resources */,
 				508831E3132691DD00C6289B /* button.ring.png in Resources */,
 				5044DFD6132C9C5200FCC0FF /* gee_norm.osu in Resources */,
+				5014FE7C13349DAB0073730C /* button.underlay.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

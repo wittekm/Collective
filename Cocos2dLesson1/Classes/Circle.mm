@@ -38,6 +38,7 @@ CCSprite * ring;
 	return self;
 }
 
+// TODO: potential memory leak here
 - (CCRenderTexture*) createCircleTexture: (int)red_ :(int)green_ :(int)blue_
 {
 	/* NOTE: Should be Retina Display-ified */
@@ -80,10 +81,6 @@ CCSprite * ring;
 	
 	id actionFadeIn = [CCFadeIn actionWithDuration:duration];
 	id actionScaleHalf = [CCScaleBy actionWithDuration:duration scale:0.5];
-	
-	
-	//[button runAction: [CCSequence actions:actionFadeIn, nil]];
-	//[ring runAction: [CCSequence actions:actionFadeIn, nil]];
 	
 	[self runAction: [CCSequence actions:actionFadeIn, nil]];
 	[ring runAction: [CCSequence actions:actionScaleHalf,  nil]];
