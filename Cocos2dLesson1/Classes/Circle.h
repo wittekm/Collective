@@ -11,9 +11,15 @@
 
 @interface Circle : HitObjectDisplay {
 	CGSize size;
+	CCSprite * button;
+	CCSprite * ring;
 }
 
 - (CCRenderTexture*) createCircleTexture: (int)red :(int)green :(int)blue;
+- (void) justDisplay;
 
+
+
+@property (readwrite, nonatomic, retain) CCSprite * ring;
 
 @end

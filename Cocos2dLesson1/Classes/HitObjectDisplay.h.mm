@@ -15,11 +15,15 @@
 	int red;
 	int green;
 	int blue;
+	double initialScale;
+	
 }
 
 - (id) initWithHitObject: (HitObject*)hitObject_ red: (int)r green: (int)g blue: (int)b;
+- (id) initWithHitObject: (HitObject*)hitObject_ red: (int)r green: (int)g blue: (int)b initialScale: (double)s;
 - (void) appearWithDuration: (double)duration;
 - (void) setOpacity: (GLubyte) opacity;
+
 
 // stuff pertaining to touch processing
 

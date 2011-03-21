@@ -52,9 +52,98 @@
 	}
 	
 	[curve invalidate];
-	[curve setPosition:ccp(-hitObject->x, -hitObject->y)];
-	//self.position = CGPointMake(hitObject->x * 1.0, hitObject->y * 1.0);
+	
 }
+
+/*
+- (CCRenderTexture*) createFadeinTexture
+{
+	CCRenderTexture * target = 
+	[[CCRenderTexture renderTextureWithWidth:480.*2 height:320.*2] retain];
+	target.position = ccp(0,0);
+	
+	curve.position = ccp(480, 320);
+	ccColor3B colorCopy = curve.color;
+	
+	Circle * circ = [[Circle alloc] initWithHitObject:hitObject red:red green:green blue:blue initialScale:initialScale];
+	circ.position = ccp(480, 320);
+	[circ justDisplay];
+	
+	// Begin tracing onto the RenderTexture
+	[target begin];
+	
+	// create the white outline
+	//[curve setOpacity: 200];
+	[curve setWidth: [curve width] * 1.15];
+	[curve setColor: ccWHITE];
+	[curve visit];
+	
+	// fill inside color
+	//[curve setOpacity: 150];
+	[curve setWidth: [curve width] / 1.15];
+	[curve setColor: colorCopy];
+	[curve visit];
+	
+	// do the begin-button
+	[circ visit];
+	
+	// trace the end-button as well
+	std::pair<int, int> end = ((HitSlider*)hitObject)->sliderPoints.back();
+	circ.position = ccp(480 + (end.first - hitObject->x), 320 + (end.second - hitObject->y));
+	[circ visit];
+	
+	[target end];
+	
+	[circ release];
+	
+	return target;
+}
+*/
+
+
+- (CCRenderTexture*) createFadeinTexture
+{
+	CCRenderTexture * target = 
+	[[CCRenderTexture renderTextureWithWidth:480. height:320.] retain];
+	target.position = ccp(480./2.,320./2.);
+	
+	curve.position = ccp(0, 0);
+	ccColor3B colorCopy = curve.color;
+	
+	Circle * circ = [[Circle alloc] initWithHitObject:hitObject red:red green:green blue:blue initialScale:initialScale];
+	circ.position = ccp(0, 0);
+	[circ justDisplay];
+	
+	// Begin tracing onto the RenderTexture
+	[target begin];
+	
+	// create the white outline
+	//[curve setOpacity: 200];
+	[curve setWidth: [curve width] * 1.15];
+	[curve setColor: ccWHITE];
+	[curve visit];
+	
+	// fill inside color
+	//[curve setOpacity: 150];
+	[curve setWidth: [curve width] / 1.15];
+	[curve setColor: colorCopy];
+	[curve visit];
+	
+	// do the begin-button
+	[circ visit];
+	
+	// trace the end-button as well
+	std::pair<int, int> end = ((HitSlider*)hitObject)->sliderPoints.back();
+	circ.position = ccp(0 + (end.first - hitObject->x), 0 + (end.second - hitObject->y));
+	[circ visit];
+	
+	[target end];
+	
+	[circ release];
+	
+	return target;
+}
+
 
 - (CCRenderTexture*) createCircleTexture
 {
@@ -76,42 +165,61 @@
 	return target;
 }
 
-- (id) initWithHitObject:(HitObject*)hitObject_ red:(int)r green:(int)g blue:(int)b {
+- (id) initWithHitObject:(HitObject*)hitObject_ red:(int)r green:(int)g blue:(int)b initialScale: (double)s {
 	
-	if( (self = [super initWithHitObject:hitObject_ red:r green:g blue:b]) ) {
+	if( (self = [super initWithHitObject:hitObject_ red:r green:g blue:b initialScale: s]) ) {
 		
 		// Set up the curve
-		curve = [FRCurve curveFromType:kFRCurveLagrange order:kFRCurveCubic segments:64]; // MAY NEED RETAIN
-		[curve setWidth: 72.0f];
-		[curve setShowControlPoints:true];
+		curve = [[FRCurve curveFromType:kFRCurveLagrange order:kFRCurveCubic segments:64] retain]; // MAY NEED RETAIN
+		// 74 is the default size of the inner part.
+		[curve setWidth: 70.0f * s];
+		//[curve setShowControlPoints:true];
 		ccColor3B curveColor = { r, g, b};
 		[curve setColor:curveColor];
 		[self addPoints];
-		[self addChild:curve];
 		
-		CCSprite * button;
+		[curve setBlendFunc: (ccBlendFunc){GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA}]; 
 		
+				
 		// Stuff cribbed from Circle
 		size = CGSizeMake(120, 120);
-		CCRenderTexture * buttonTex = [self createCircleTexture];
 		
 		ring = [CCSprite spriteWithFile:@"button.ring.png"];		 
-		ring.position = ccp(0,0);
+		ring.position = ccp(hitObject->x, hitObject->y);
+				
+		CCRenderTexture * fadeinTex = [self createFadeinTexture];
+		/*
+		slider = [CCSprite spriteWithTexture: [[fadeinTex sprite] texture]];
+		slider.position = ccp(480/2, 320/2 - hitObject->y);
+		[self addChild: slider];
+
+		[fadeinTex release];
+		 */
+		[self addChild: fadeinTex];
 		
-		//[self addChild:button];
-		button = [CCSprite spriteWithTexture: [[buttonTex sprite] texture]];
-		[self addChild: button];
-		[self addChild:ring];
+		//[self addChild: fadeinTexture];
+		//[self addChild:curve];
+		//[self addChild: button];
+		//[self addChild:endButton];
+		[self addChild: ring];
+		
+		//endButton.scale = initialScale;
+		ring.scale = initialScale;
 		
 		[self setOpacity:0];
 	}
 	return self;
 }
 
+- (void) ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	NSLog(@"derp derpensteinberg");
+}
+
+
 - (void) appearWithDuration:(double)duration {
 	self.visible = true;
 	ring.visible = true;
-	[ring setScale:1.0];
+	ring.scale = initialScale;
 	
 	id actionFadeIn = [CCFadeIn actionWithDuration:duration];
 	id actionScaleHalf = [CCScaleBy actionWithDuration:duration scale:0.5];
@@ -121,8 +229,15 @@
 }
 
 - (void) dealloc {
+	/*
+	[fadeinTexture release];
+	[ring release];
+	[curve release]; // dealloc instead?
+	 */
+	[self removeAllChildrenWithCleanup:true];
+	//[curve release];
+	//[ring release];
 	[super dealloc];
-	[curve dealloc];
 }
 
 

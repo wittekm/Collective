@@ -43,10 +43,10 @@ CGPoint end_;
 
 HitObjectDisplay* HODFactory(HitObject* hitObject, int r, int g, int b) {
 	if(hitObject->objectType & 1) { // bitmask for normal
-		return [[Circle alloc] initWithHitObject:hitObject red:r green:g blue:b];
+		return [[Circle alloc] initWithHitObject:hitObject red:r green:g blue:b initialScale: 0.7];
 	}
 	else if(hitObject->objectType & 2) {
-		return [[HODSlider alloc] initWithHitObject:hitObject red:r green:g blue:b];
+		return [[HODSlider alloc] initWithHitObject:hitObject red:r green:g blue:b initialScale: 1];
 	}
 	else {
 		// this is just a "unknown type" circle, we haven't done spinner yet
@@ -168,11 +168,12 @@ HitObjectDisplay* HODFactory(HitObject* hitObject, int r, int g, int b) {
 		scoreLabel.position = ccp(430,200);
 		[self addChild: scoreLabel];
 		
-		
-		
-		//HODSlider * s = [[HODSlider alloc] initWithHitObject:beatmap->hitObjects.front() red:0 green:0 blue:100];
-		//[self addChild:s];
-		
+		/*
+		HitObject * o = beatmap->hitObjects.front();
+		HitObjectDisplay * hod = HODFactory(o, 0, 120, 0);
+		[self addChild:hod];
+		[hod appearWithDuration:0.7];
+		 */
 	}
 	return self;
 }
@@ -185,9 +186,6 @@ BOOL otherDirection = NO;
 	
 	double milliseconds = [musicPlayer currentPlaybackTime] * 1000.0f;
 	milliseconds += 1000; // offset for gee norm
-	//double milliseconds = [timer timeFromStart] * 1000.0f;
-	//milliseconds += 1000; // offset for m-flo
-	
 	
 	double durationS = 0.8; // seconds
 	double timeAllowanceMs = 150;
@@ -199,7 +197,7 @@ BOOL otherDirection = NO;
 		
 		if(milliseconds > o->startTimeMs) {
 			cout << o->x << " " << o->y << endl;
-			cout << "making a circle" << endl;
+			cout << "making a HitObject at time " << o->startTimeMs << endl;
 			
 			//HitObjectDisplay * hod = [[Circle alloc] initWithHitObject:o red:0 green:180 blue:0];
 			 
@@ -228,18 +226,35 @@ BOOL otherDirection = NO;
 	
 }
 
--(void) registerWithTouchDispatcher
-{
-	[[CCTouchDispatcher sharedDispatcher] addTargetedDelegate:self priority:0 swallowsTouches:YES];
+BOOL paused = false;
+
+- (void) ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	NSArray * touchesArray = [touches allObjects];
+	NSLog(@"%d", [touchesArray  count]);
+	if([touches count] > 1) {
+		if(!paused) {
+			[[CCDirector sharedDirector] stopAnimation];
+			[musicPlayer pause];
+			paused = true;
+		} else {
+			[[CCDirector sharedDirector] startAnimation];
+			[musicPlayer play];
+			paused = false;
+		}
+	}
+	UITouch *touch = [touches anyObject];
+}
+
+- (void) ccTouchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+	UITouch* touch = [touches anyObject];
+	NSSet* allTouches = [touches setByAddingObjectsFromSet:[event touchesForView:[touch view]]];
+	NSArray* allTheTouches = [allTouches allObjects];
+	
+	NSLog(@"%d", [allTheTouches count]);
 }
 
 
 /*
--(BOOL)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	
-}
- */
-
 - (BOOL)ccTouchBegan:(UITouch *)touch withEvent:(UIEvent *)event {
 	CGPoint location = [self convertTouchToNodeSpace: touch];
 	
@@ -259,11 +274,22 @@ BOOL otherDirection = NO;
 
     return YES;
 }
+*/
 
+/*
 - (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
 	CGPoint location = [self convertTouchToNodeSpace: touch];
-	
 }
+ */
+
+- (void) ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+	NSLog(@"hey i was called ~neato");
+}
+/*
+- (void)ccTouchEnded:(UITouch *)touch withEvent:(UIEvent *)event {
+	CGPoint location = [self convertTouchToNodeSpace: touch];
+}
+ */
 
 
 

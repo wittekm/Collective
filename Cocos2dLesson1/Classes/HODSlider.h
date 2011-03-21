@@ -15,7 +15,12 @@
 @interface HODSlider : HitObjectDisplay {
 	FRCurve * curve;
 	CGSize size;
+	
+	CCSprite * slider;
 	CCSprite * ring;
 }
+
+- (CCRenderTexture*) createFadeinTexture;
+- (CCRenderTexture*) createCircleTexture;
 
 @end

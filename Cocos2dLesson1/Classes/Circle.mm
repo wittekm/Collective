@@ -9,31 +9,53 @@
 #import "Circle.h"
 #import "osu-import.h.mm"
 
-CCSprite * button;
-CCSprite * ring;
-
 @implementation Circle
+@synthesize ring;
+
+static NSMutableArray *circleTextures = nil;
 
 // on "init" you need to initialize your instance
 
-- (id) initWithHitObject:(HitObject*)hitObject_ red:(int)r green:(int)g blue:(int)b
+- (id) initWithHitObject:(HitObject*)hitObject_ red:(int)r green:(int)g blue:(int)b initialScale: (double)s
 {
-	if( (self = [super initWithHitObject:hitObject_ red:r green:g blue:b]) ) {
+	if( (self = [super initWithHitObject:hitObject_ red:r green:g blue:b initialScale: s]) ) {
 		self.visible = false;
 		
 		size = CGSizeMake(120, 120);
 		
-		CCRenderTexture * buttonTex = [self createCircleTexture:r :g :b];
+		CCRenderTexture * buttonTex;
+		
+		/*
+		if(circleTextures == nil) {
+			circleTextures = [[NSMutableArray alloc] init];
+		}
+		
+		if([circleTextures count] == 0) {
+			buttonTex = [[self createCircleTexture:r :g :b] retain];
+			[circleTextures insertObject:buttonTex atIndex:0];
+		} else {
+			buttonTex = [[circleTextures objectAtIndex:0] retain];
+		}
+		 */
+		buttonTex = [[self createCircleTexture:r :g :b] retain];
+
 		
 		ring = [CCSprite spriteWithFile:@"button.ring.png"];		 
-		ring.position = ccp(0,0);
+		ring.position = ccp(hitObject->x * 1.0, hitObject->y * 1.0);
 		
-		//[self addChild:button];
 		button = [CCSprite spriteWithTexture: [[buttonTex sprite] texture]];
+		button.position = ccp(hitObject->x * 1.0, hitObject->y * 1.0);
 		[self addChild: button];
 		[self addChild:ring];
 		
+		button.scale = initialScale;
+		ring.scale = initialScale;
+		
 		[self setOpacity:0];
+		
+		[buttonTex release];
+		
+		// TODO: gotta eventually release everything in circleTextures
 	}
 	return self;
 }
@@ -46,30 +68,24 @@ CCSprite * ring;
 	[[CCRenderTexture renderTextureWithWidth:size.width height:size.height] retain];
 	target.position = ccp(0,0);
 	
-	CCSprite * underlay = [CCSprite spriteWithFile:@"button.underlay.png"];
-	CCSprite * button = [CCSprite spriteWithFile:@"button.button.png"];
-	CCSprite * overlay = [CCSprite spriteWithFile:@"button.overlay.png"];
-	underlay.position = ccp(size.width/2,size.height/2);
-	button.position = ccp(size.width/2,size.height/2);
-	overlay.position = ccp(size.width/2,size.height/2);
+	CCSprite * underlayTex = [CCSprite spriteWithFile:@"button.underlay.png"];
+	CCSprite * buttonTex = [CCSprite spriteWithFile:@"button.button.png"];
+	CCSprite * overlayTex = [CCSprite spriteWithFile:@"button.overlay.png"];
+	underlayTex.position = ccp(size.width/2,size.height/2);
+	buttonTex.position = ccp(size.width/2,size.height/2);
+	overlayTex.position = ccp(size.width/2,size.height/2);
 	
-	button.color = ccc3(red_, green_, blue_);
+	buttonTex.color = ccc3(red_, green_, blue_);
 	
 	[target begin];
-	[underlay visit];
-	[button visit];
-	[overlay visit];
+	[underlayTex visit];
+	[buttonTex visit];
+	[overlayTex visit];
 	[target end];
 	
 	return target;
 }
 
-/*
--(id) init
-{
-	return [self initWithColor: 200 green:0 blue:0];
-}
-*/
 
 - (void) appearWithDuration: (double)duration
 {
@@ -77,53 +93,32 @@ CCSprite * ring;
 	
 	self.visible = true;
 	ring.visible = true;
-	[ring setScale:1.0];
+	[ring setScale:initialScale];
 	
 	id actionFadeIn = [CCFadeIn actionWithDuration:duration];
-	id actionScaleHalf = [CCScaleBy actionWithDuration:duration scale:0.5];
+	id actionScaleHalf = [CCScaleBy actionWithDuration:duration scale: 0.5];
 	
 	[self runAction: [CCSequence actions:actionFadeIn, nil]];
 	[ring runAction: [CCSequence actions:actionScaleHalf,  nil]];
 }
 
-/*
- -(id) initWithColor:(int)red green:(int)green blue:(int)blue
- {
- if( (self=[super init] )) {
- 
- self.visible = false;
- 
- size = CGSizeMake(120, 120);
- 
- CCRenderTexture * buttonTex = [self createCircleTexture:red :green :blue];
- 
- ring = [CCSprite spriteWithFile:@"button.ring.png"];		 
- ring.position = ccp(0,0);
- 
- //[self addChild:button];
- button = [CCSprite spriteWithTexture: [[buttonTex sprite] texture]];
- [self addChild: button];
- [self addChild:ring];
- 
- [self setOpacity:0];
- 
- }
- return self;
- }
- */
-
-/*
--(void) setOpacity: (GLubyte) opacity
-{
-	for( CCNode *node in [self children] )
-	{
-		if( [node conformsToProtocol:@protocol( CCRGBAProtocol)] )
-		{
-			[(id<CCRGBAProtocol>) node setOpacity: opacity];
-		}
-	}
+- (void) ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	NSLog(@"testing 123");
+	
 }
- */
+
+- (void) justDisplay {
+	ring.visible = false;
+	self.visible = true;
+	[self setOpacity:255];
+	//[ring setOpacity: 0];
+}
+
+- (void) dealloc {
+	[super dealloc];
+	//[button release];
+	//[ring release];
+}
 
 
 @end

@@ -14,12 +14,17 @@
 @synthesize hitObject;
 
 - (id) initWithHitObject: (HitObject*)hitObject_ red: (int)r green: (int)g blue: (int)b {
+	return [self initWithHitObject: hitObject_ red: r green: g blue: b initialScale: 1.0];
+}
+
+- (id) initWithHitObject: (HitObject*)hitObject_ red: (int)r green: (int)g blue: (int)b initialScale: (double)s{
 	if( (self=[super init]) ) {
 		hitObject = hitObject_;
 		red = r;
 		green = g;
 		blue = b;
-		self.position = CGPointMake(hitObject->x * 1.0, hitObject->y * 1.0);
+		initialScale = s;
+		//self.position = CGPointMake(hitObject->x * 1.0, hitObject->y * 1.0);
 	}
 	return self;
 }
@@ -39,9 +44,11 @@
 	}
 }
 
+
 - (void) dealloc {
+	//delete hitObject; // WOOPSSSSS
+	[self removeAllChildrenWithCleanup:true];
 	[super dealloc];
-	delete hitObject;
 }
 
 @end
