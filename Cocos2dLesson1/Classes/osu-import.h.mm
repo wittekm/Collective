@@ -22,14 +22,14 @@ typedef char * OSUString; // up for changing later
 
 struct HitObject {
 	HitObject() {}
-	HitObject(int x_, int y_, int startTimeMs_, int objectType_, int soundType_) :
-	x(x_), y(y_), startTimeMs(startTimeMs_), objectType(objectType_), soundType(soundType_) {}
+	HitObject(int x_, int y_, int startTimeMs_, int objectType_, int soundType_);
 	
 	int x;
 	int y;
 	int startTimeMs;
 	int objectType;
 	int soundType;
+	int number;
 	
 	friend std::ostream &operator<<(std::ostream&, const HitObject&);
 };
@@ -50,6 +50,7 @@ struct HitSpinner : public HitObject {
 };
 
 std::ostream& operator<<(std::ostream& os, const HitObject& o);
+
 
 class Beatmap {
 	
@@ -89,8 +90,82 @@ public:
 	// [HitObjects]
 	std::list<HitObject *> hitObjects;
 };
+ 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// And here, I attempt to make a beatmap Objective-C Compatible.
+@interface ObjBeatmap : NSObject {
+	// [General]
+	NSString * AudioFilename;
+	int AudioLeadIn;
+	int PreviewTime;
+	int Countdown;
+	NSString * SampleSet;
+	NSMutableArray * EditorBookmarks;
+	
+	// [Metadata]
+	NSString * Title, Artist, Creator, Version, Source, Tags;
+	
+	// [Difficulty]
+	int HPDrainRate;
+	int CircleSize;
+	int OverallDifficulty;
+	double SliderMultiplier;
+	int SliderTickRate;
+	
+	// [Events]
+	
+	// [TimingPoints]
+	int offsetMs;
+	double beatLength;
+	int timingSignature;
+	int sampleSetId;
+	BOOL useCustomSamples;
+	
+	// [Colours] (lol colours... up to five of them, btw
+	NSMutableArray * comboColors;
+	
+	// [HitObjects]
+	NSMutableArray * hitObjects;
+}
+
+@property (retain) NSMutableArray * hitObjects;
+
+@end
+
+
+@interface ObjHitObject : NSObject {
+
+	int x;
+	int y;
+	int startTimeMs;
+	int objectType;
+	int soundType;
+}
+
+@property int x;
+@property int y;
+@property int startTimeMs;
+@property int objectType;
+@property int soundType;
+
+@end
 
 
 #endif

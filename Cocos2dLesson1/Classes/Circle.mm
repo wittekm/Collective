@@ -24,19 +24,6 @@ static NSMutableArray *circleTextures = nil;
 		size = CGSizeMake(120, 120);
 		
 		CCRenderTexture * buttonTex;
-		
-		/*
-		if(circleTextures == nil) {
-			circleTextures = [[NSMutableArray alloc] init];
-		}
-		
-		if([circleTextures count] == 0) {
-			buttonTex = [[self createCircleTexture:r :g :b] retain];
-			[circleTextures insertObject:buttonTex atIndex:0];
-		} else {
-			buttonTex = [[circleTextures objectAtIndex:0] retain];
-		}
-		 */
 		buttonTex = [[self createCircleTexture:r :g :b] retain];
 
 		
@@ -45,6 +32,8 @@ static NSMutableArray *circleTextures = nil;
 		
 		button = [CCSprite spriteWithTexture: [[buttonTex sprite] texture]];
 		button.position = ccp(hitObject->x * 1.0, hitObject->y * 1.0);
+		button.flipY = YES;
+		
 		[self addChild: button];
 		[self addChild:ring];
 		
@@ -60,12 +49,19 @@ static NSMutableArray *circleTextures = nil;
 	return self;
 }
 
-// TODO: potential memory leak here
-- (CCRenderTexture*) createCircleTexture: (int)red_ :(int)green_ :(int)blue_
+- (CCRenderTexture*) createCircleTexture: (int)red_ :(int)green_ :(int)blue_ {
+	return [self createCircleTexture: red_ :green_ :blue_ :true];
+}
+
+
+// I should make a circle texture bank. (colorgroup -> (number -> texture) ) and 0 for no-number
+
+// TODO: potential memory leak here???
+- (CCRenderTexture*) createCircleTexture: (int)red_ :(int)green_ :(int)blue_ :(BOOL)doNumber
 {
 	/* NOTE: Should be Retina Display-ified */
 	CCRenderTexture * target = 
-	[[CCRenderTexture renderTextureWithWidth:size.width height:size.height] retain];
+	[CCRenderTexture renderTextureWithWidth:size.width height:size.height];
 	target.position = ccp(0,0);
 	
 	CCSprite * underlayTex = [CCSprite spriteWithFile:@"button.underlay.png"];
@@ -81,6 +77,15 @@ static NSMutableArray *circleTextures = nil;
 	[underlayTex visit];
 	[buttonTex visit];
 	[overlayTex visit];
+	
+	if(doNumber) {
+		CCLabelTTF * numberDisplay = 
+		[CCLabelTTF labelWithString:[NSString stringWithFormat:@"%d", hitObject->number] 
+						   fontName:@"Helvetica Neue" fontSize:48];
+		numberDisplay.position = ccp(size.width/2,size.height/2);
+		[numberDisplay visit];
+	}
+	
 	[target end];
 	
 	return target;

@@ -43,14 +43,14 @@ CGPoint end_;
 
 HitObjectDisplay* HODFactory(HitObject* hitObject, int r, int g, int b) {
 	if(hitObject->objectType & 1) { // bitmask for normal
-		return [[Circle alloc] initWithHitObject:hitObject red:r green:g blue:b initialScale: 0.7];
+		return [[[Circle alloc] initWithHitObject:hitObject red:r green:g blue:b initialScale: 0.7] retain];
 	}
 	else if(hitObject->objectType & 2) {
-		return [[HODSlider alloc] initWithHitObject:hitObject red:r green:g blue:b initialScale: 1];
+		return [[[HODSlider alloc] initWithHitObject:hitObject red:r green:g blue:b initialScale: 1] retain];
 	}
 	else {
 		// this is just a "unknown type" circle, we haven't done spinner yet
-		return [[Circle alloc] initWithHitObject:hitObject red:150 green:0 blue:0];
+		return [[[Circle alloc] initWithHitObject:hitObject red:150 green:0 blue:0] retain];
 	}
 	return 0;
 }
@@ -153,7 +153,7 @@ HitObjectDisplay* HODFactory(HitObject* hitObject, int r, int g, int b) {
 			albumArt.position = ccp(480/2, 320/2);
 			[self addChild:albumArt];
 			
-			[musicPlayer setCurrentPlaybackTime:18]; // skip intro
+			[musicPlayer setCurrentPlaybackTime:18]; // skip intro, usually 18
 			
 		} @catch(NSException *e) {
 			cout << "no music playing dawg" << endl;
@@ -168,12 +168,12 @@ HitObjectDisplay* HODFactory(HitObject* hitObject, int r, int g, int b) {
 		scoreLabel.position = ccp(430,200);
 		[self addChild: scoreLabel];
 		
-		/*
+		
 		HitObject * o = beatmap->hitObjects.front();
 		HitObjectDisplay * hod = HODFactory(o, 0, 120, 0);
 		[self addChild:hod];
-		[hod appearWithDuration:0.7];
-		 */
+		[hod appearWithDuration:1.5];
+		 
 	}
 	return self;
 }
@@ -218,6 +218,7 @@ BOOL otherDirection = NO;
 			HitObjectDisplay * c = circles.front();
 			circles.pop_front();
 			[self removeChild:c cleanup:true];
+			[c release];
 		}
 		else
 			break;
@@ -251,6 +252,11 @@ BOOL paused = false;
 	NSArray* allTheTouches = [allTouches allObjects];
 	
 	NSLog(@"%d", [allTheTouches count]);
+	
+	/*
+	CGPoint location = [self convertTouchToNodeSpace: touch];
+	[(HODSlider*)[self getChildByTag:0] slider].position = ccp(location.x, location.y);
+	 */
 }
 
 

@@ -16,11 +16,12 @@
 	FRCurve * curve;
 	CGSize size;
 	
+	CCRenderTexture * fadeinTex;
 	CCSprite * slider;
 	CCSprite * ring;
 }
 
+
 - (CCRenderTexture*) createFadeinTexture;
-- (CCRenderTexture*) createCircleTexture;
 
 @end

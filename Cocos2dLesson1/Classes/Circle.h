@@ -16,6 +16,7 @@
 }
 
 - (CCRenderTexture*) createCircleTexture: (int)red :(int)green :(int)blue;
+- (CCRenderTexture*) createCircleTexture: (int)red :(int)green :(int)blue :(BOOL)doNumber;
 - (void) justDisplay;
 
 

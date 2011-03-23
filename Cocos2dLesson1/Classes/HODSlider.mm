@@ -103,6 +103,7 @@
 
 - (CCRenderTexture*) createFadeinTexture
 {
+	NSLog(@"abotu to make target");
 	CCRenderTexture * target = 
 	[[CCRenderTexture renderTextureWithWidth:480. height:320.] retain];
 	target.position = ccp(480./2.,320./2.);
@@ -110,60 +111,50 @@
 	curve.position = ccp(0, 0);
 	ccColor3B colorCopy = curve.color;
 	
+	NSLog(@"abotu to make circle");
 	Circle * circ = [[Circle alloc] initWithHitObject:hitObject red:red green:green blue:blue initialScale:initialScale];
 	circ.position = ccp(0, 0);
 	[circ justDisplay];
 	
+	NSLog(@"abotu to begin");
 	// Begin tracing onto the RenderTexture
 	[target begin];
 	
+	NSLog(@"abotu to visit curve 1");
 	// create the white outline
 	//[curve setOpacity: 200];
 	[curve setWidth: [curve width] * 1.15];
 	[curve setColor: ccWHITE];
 	[curve visit];
-	
+	 
+	NSLog(@"abotu to visit curve 2");
 	// fill inside color
 	//[curve setOpacity: 150];
 	[curve setWidth: [curve width] / 1.15];
 	[curve setColor: colorCopy];
 	[curve visit];
 	
+	NSLog(@"abotu to visit circ 1");
 	// do the begin-button
 	[circ visit];
 	
+	/*
 	// trace the end-button as well
-	std::pair<int, int> end = ((HitSlider*)hitObject)->sliderPoints.back();
-	circ.position = ccp(0 + (end.first - hitObject->x), 0 + (end.second - hitObject->y));
+	std::pair<int, int>& end = ((HitSlider*)hitObject)->sliderPoints.back();
+	circ.position = ccp(end.first - hitObject->x, end.second - hitObject->y);
 	[circ visit];
-	
+	 */
+	NSLog(@"abotu to end");
 	[target end];
 	
+	NSLog(@"about to release");
 	[circ release];
+	NSLog(@"about to return");
 	
 	return target;
 }
 
 
-- (CCRenderTexture*) createCircleTexture
-{
-	/* NOTE: Should be Retina Display-ified */
-	CCRenderTexture * target = 
-	[[CCRenderTexture renderTextureWithWidth:size.width height:size.height] retain];
-	target.position = ccp(0,0);
-	
-	CCSprite * underlay = [CCSprite spriteWithFile:@"button.underlay.png"];
-	CCSprite * overlay = [CCSprite spriteWithFile:@"button.overlay.png"];
-	underlay.position = ccp(size.width/2,size.height/2);
-	overlay.position = ccp(size.width/2,size.height/2);
-	
-	[target begin];
-	[underlay visit];
-	[overlay visit];
-	[target end];
-	
-	return target;
-}
 
 - (id) initWithHitObject:(HitObject*)hitObject_ red:(int)r green:(int)g blue:(int)b initialScale: (double)s {
 	
@@ -184,29 +175,24 @@
 		// Stuff cribbed from Circle
 		size = CGSizeMake(120, 120);
 		
-		ring = [CCSprite spriteWithFile:@"button.ring.png"];		 
+		ring = [CCSprite spriteWithFile:@"button.ring.png"];
+		ring.color = ccORANGE;
 		ring.position = ccp(hitObject->x, hitObject->y);
 				
-		CCRenderTexture * fadeinTex = [self createFadeinTexture];
-		/*
-		slider = [CCSprite spriteWithTexture: [[fadeinTex sprite] texture]];
-		slider.position = ccp(480/2, 320/2 - hitObject->y);
+		// Create the fadein texture and the corresponding CCSprite
+		fadeinTex = [self createFadeinTexture];
+		slider = [CCSprite spriteWithTexture:[[fadeinTex sprite] texture] ];
+		slider.position = ccp(480/2, 320/2);
+		slider.flipY = true;
 		[self addChild: slider];
-
-		[fadeinTex release];
-		 */
-		[self addChild: fadeinTex];
 		
-		//[self addChild: fadeinTexture];
-		//[self addChild:curve];
-		//[self addChild: button];
-		//[self addChild:endButton];
+		
 		[self addChild: ring];
 		
-		//endButton.scale = initialScale;
 		ring.scale = initialScale;
 		
 		[self setOpacity:0];
+		
 	}
 	return self;
 }
@@ -226,6 +212,14 @@
 	
 	[self runAction: [CCSequence actions:actionFadeIn, nil]];
 	[ring runAction: [CCSequence actions:actionScaleHalf,  nil]];
+	
+	// apparently needed
+	//[fadeinTex runAction:[CCSequence actions:actionFadeIn, nil]];
+	//[[fadeinTex sprite] runAction:[CCSequence actions:actionFadeIn, nil]];
+	
+	//[slider runAction: [CCSequence actions: actionFadeIn, nil]];
+	//[ring runAction: [CCSpawn actions:actionFadeIn, actionScaleHalf, nil]];
+	
 }
 
 - (void) dealloc {

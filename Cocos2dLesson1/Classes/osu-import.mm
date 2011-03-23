@@ -29,6 +29,16 @@ enum HitObjectType {
 	Normal = 1, Slider = 2, NewCombo = 4, NormalNewCombo = 5, SliderNewCombo = 6, Spinner = 8
 };
 
+int numberCounter = 1; // ughhhh globals suckkkk
+
+HitObject::HitObject(int x_, int y_, int startTimeMs_, int objectType_, int soundType_) 
+: x(x_), y(y_), startTimeMs(startTimeMs_), objectType(objectType_), soundType(soundType_) {
+	if(objectType & 4) // new combo
+		numberCounter = 1;
+	
+	number = numberCounter++;
+}
+
 HitSlider::HitSlider(int x_, int y_, int startTimeMs_, int objectType_, int soundType_, stringstream& ss) 
 : HitObject(x_, y_, startTimeMs_, objectType_, soundType_) {
 	string word;
@@ -106,6 +116,7 @@ HitObject * readHitObject(string line) {
 	
 	else
 	{
+		NSLog(@"I asserted zero. Woops.");
 		assert(0);
 		return 0;
 	}
